@@ -6,6 +6,7 @@ import ExpenseList from "./pages/ExpenseList";
 import AddExpense from "./pages/AddExpense";
 import EditExpense from "./pages/EditExpense";
 import PrivateRoute from "./components/PrivateRoute";
+import Register from "./pages/Register";
 import { ToastContainer } from "react-toastify";
 
 function App() {
@@ -19,7 +20,15 @@ function App() {
                     path="/"
                     element={<Login />}
                 />
+                <Route
+    path="/"
+    element={<Login />}
+/>
 
+<Route
+    path="/register"
+    element={<Register />}
+/>
                 {/* Protected Dashboard */}
                 <Route
                     path="/dashboard"

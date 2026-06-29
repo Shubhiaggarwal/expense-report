@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import Navbar from "../components/Navbar";
+import { toast } from "react-toastify";
 
 function ExpenseList() {
 
-    const [expenses, setExpenses] = useState([]);
-
     const navigate = useNavigate();
+
+    const [expenses, setExpenses] = useState([]);
+    const [search, setSearch] = useState("");
+    const [category, setCategory] = useState("All");
 
     const fetchExpenses = async () => {
 
@@ -24,7 +28,7 @@ function ExpenseList() {
 
         } catch (err) {
 
-            console.log(err);
+            toast.error(err.response?.data?.message || "Failed to fetch expenses");
 
         }
 
@@ -38,7 +42,8 @@ function ExpenseList() {
 
     const deleteExpense = async (id) => {
 
-        if (!window.confirm("Delete this expense?")) return;
+        if (!window.confirm("Delete this expense?"))
+            return;
 
         try {
 
@@ -52,120 +57,180 @@ function ExpenseList() {
 
             fetchExpenses();
 
-        } catch (err) {
+        }
 
-            alert("Unable to delete expense");
+        catch (err) {
+
+            toast.error(err.response?.data?.message || "Unable to delete expense");
 
         }
 
     };
 
+    const filteredExpenses = expenses.filter((expense) => {
+
+        const titleMatch =
+            expense.title.toLowerCase().includes(search.toLowerCase());
+
+        const categoryMatch =
+            category === "All" || expense.category === category;
+
+        return titleMatch && categoryMatch;
+
+    });
+
     return (
 
-        <div className="container mt-5">
+        <>
 
-            <div className="d-flex justify-content-between mb-4">
+            <Navbar />
 
-                <h2>Expense List</h2>
+            <div className="container mt-4">
 
-                <button
-                    className="btn btn-success"
-                    onClick={() => navigate("/add-expense")}
-                >
-                    Add Expense
-                </button>
+                <div className="d-flex justify-content-between align-items-center mb-4">
 
-            </div>
+                    <h2>Expense List</h2>
 
-            <table className="table table-bordered table-hover">
+                    <button
+                        className="btn btn-success"
+                        onClick={() => navigate("/add-expense")}
+                    >
+                        + Add Expense
+                          </button>
 
-                <thead className="table-dark">
+                </div>
 
-                    <tr>
+                <div className="row mb-3">
 
-                        <th>Title</th>
+                    <div className="col-md-6">
 
-                        <th>Amount</th>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search Expense..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
 
-                        <th>Category</th>
+                    </div>
 
-                        <th>Date</th>
+                    <div className="col-md-4">
 
-                        <th>Description</th>
+                        <select
+                            className="form-select"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        >
 
-                        <th>Action</th>
+                            <option value="All">All Categories</option>
+                            <option value="Food">Food</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Bills">Bills</option>
 
-                    </tr>
+                        </select>
 
-                </thead>
+                    </div>
 
-                <tbody>
+                </div>
 
-                    {
+                <table className="table table-striped table-hover shadow">
 
-                        expenses.length === 0 ?
+                    <thead className="table-dark">
 
-                            <tr>
+                        <tr>
 
-                                <td colSpan="6" className="text-center">
+                            <th>Title</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Action</th>
 
-                                    No Expenses Found
+                        </tr>
 
-                                </td>
+                    </thead>
 
-                            </tr>
+                    <tbody>
 
-                            :
+                        {
 
-                            expenses.map((expense) => (
+                            filteredExpenses.length === 0 ?
 
-                                <tr key={expense.id}>
+                                <tr>
 
-                                    <td>{expense.title}</td>
+                                    <td
+                                        colSpan="6"
+                                        className="text-center"
+                                    >
 
-                                    <td>₹ {expense.amount}</td>
-
-                                    <td>{expense.category}</td>
-
-                                    <td>
-                                        {new Date(expense.expense_date).toLocaleDateString()}
-                                    </td>
-
-                                    <td>{expense.description}</td>
-
-                                    <td>
-
-                                        <button
-                                            className="btn btn-warning btn-sm me-2"
-                                            onClick={() =>
-                                                navigate(`/edit-expense/${expense.id}`)
-                                            }
-                                        >
-                                            Edit
-                                        </button>
-
-                                        <button
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() =>
-                                                deleteExpense(expense.id)
-                                            }
-                                        >
-                                            Delete
-                                        </button>
+                                        No Expenses Found
 
                                     </td>
 
                                 </tr>
 
-                            ))
+                                :
 
-                    }
+                                filteredExpenses.map((expense) => (
 
-                </tbody>
+                                    <tr key={expense.id}>
 
-            </table>
+                                        <td>{expense.title}</td>
 
-        </div>
+                                        <td>₹ {expense.amount}</td>
+
+                                        <td>{expense.category}</td>
+
+                                        <td>
+
+                                            {new Date(
+                                                expense.expense_date
+                                            ).toLocaleDateString()}
+
+                                        </td>
+
+                                        <td>{expense.description}</td>
+
+                                        <td>
+
+                                            <button
+                                                className="btn btn-warning btn-sm me-2"
+                                                onClick={() =>
+                                                    navigate(`/edit-expense/${expense.id}`)
+                                                }
+                                            >
+
+                                                Edit
+
+                                            </button>
+
+                                            <button
+                                                className="btn btn-danger btn-sm"
+                                                onClick={() =>
+                                                    deleteExpense(expense.id)
+                                                }
+                                            >
+
+                                                Delete
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                ))
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </>
 
     );
 

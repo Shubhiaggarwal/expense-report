@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import Navbar from "../components/Navbar";
 
 function Dashboard() {
 
@@ -46,39 +47,71 @@ function Dashboard() {
 
     }, [navigate]);
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        navigate("/");
-    };
-
     return (
 
-        <div className="container mt-5">
+        <>
 
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <Navbar />
 
-                <h2>Expense Controller Dashboard</h2>
+            <div className="container mt-4">
 
-                <button
-                    className="btn btn-danger"
-                    onClick={logout}
-                >
-                    Logout
-                </button>
+                <div className="text-center mb-5">
 
-            </div>
+                    <h1 className="fw-bold">
+                        💰 Expense Controller
+                    </h1>
 
-            <div className="row">
+                    <p className="text-muted">
+                        Manage your daily expenses efficiently
+                    </p>
 
-                <div className="col-md-4 mb-3">
+                </div>
 
-                    <div className="card shadow">
+                <div className="row">
 
-                        <div className="card-body text-center">
+                    <div className="col-lg-4 col-md-6 mb-4">
 
-                            <h5>Total Expense</h5>
+                        <div className="card text-white bg-primary shadow-lg border-0">
 
-                            <h3>₹ {summary.totalExpense}</h3>
+                            <div className="card-body text-center">
+
+                                <h5>Total Expense</h5>
+
+                                <h2>₹ {summary.totalExpense}</h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div className="col-lg-4 col-md-6 mb-4">
+
+                        <div className="card text-white bg-success shadow-lg border-0">
+
+                            <div className="card-body text-center">
+
+                                <h5>Total Transactions</h5>
+
+                                <h2>{summary.totalTransactions}</h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div className="col-lg-4 col-md-12 mb-4">
+
+                        <div className="card text-dark bg-warning shadow-lg border-0">
+
+                            <div className="card-body text-center">
+
+                                <h5>Highest Expense</h5>
+
+                                <h2>₹ {summary.highestExpense}</h2>
+
+                            </div>
 
                         </div>
 
@@ -86,31 +119,31 @@ function Dashboard() {
 
                 </div>
 
-                <div className="col-md-4 mb-3">
+                <div className="card shadow mt-4">
 
-                    <div className="card shadow">
+                    <div className="card-body">
 
-                        <div className="card-body text-center">
+                        <h4 className="mb-3">
 
-                            <h5>Total Transactions</h5>
+                            Quick Actions
 
-                            <h3>{summary.totalTransactions}</h3>
+                        </h4>
 
-                        </div>
+                        <div className="d-flex flex-wrap gap-3">
 
-                    </div>
+                            <button
+                                className="btn btn-success"
+                                onClick={() => navigate("/add-expense")}
+                            >
+                                ➕ Add Expense
+                            </button>
 
-                </div>
-
-                <div className="col-md-4 mb-3">
-
-                    <div className="card shadow">
-
-                        <div className="card-body text-center">
-
-                            <h5>Highest Expense</h5>
-
-                            <h3>₹ {summary.highestExpense}</h3>
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => navigate("/expenses")}
+                            >
+                                📋 View Expenses
+                            </button>
 
                         </div>
 
@@ -120,27 +153,7 @@ function Dashboard() {
 
             </div>
 
-            <hr />
-
-            <div className="text-center">
-
-                <button
-                    className="btn btn-success me-3"
-                    onClick={() => navigate("/add-expense")}
-                >
-                    Add Expense
-                </button>
-
-                <button
-                    className="btn btn-primary"
-                    onClick={() => navigate("/expenses")}
-                >
-                    View Expenses
-                </button>
-
-            </div>
-
-        </div>
+        </>
 
     );
 

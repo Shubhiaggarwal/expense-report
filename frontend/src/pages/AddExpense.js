@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import Navbar from "../components/Navbar";
+import { toast } from "react-toastify";
 
 function AddExpense() {
 
@@ -36,15 +38,15 @@ function AddExpense() {
                 }
             );
 
-            alert("Expense Added Successfully");
+            toast.success("Expense Added Successfully");
 
-            navigate("/dashboard");
+            navigate("/expenses");
 
         }
 
         catch (err) {
 
-            alert(err.response?.data?.message || "Something went wrong");
+            toast.error(err.response?.data?.message || "Something went wrong");
 
         }
 
@@ -52,97 +54,160 @@ function AddExpense() {
 
     return (
 
-        <div className="container mt-5">
+        <>
 
-            <div className="row justify-content-center">
+            <Navbar />
 
-                <div className="col-md-6">
+            <div className="container mt-5">
 
-                    <div className="card shadow">
+                <div className="row justify-content-center">
 
-                        <div className="card-body">
+                    <div className="col-md-7">
 
-                            <h2 className="text-center mb-4">
-                                Add Expense
-                            </h2>
+                        <div className="card shadow-lg">
 
-                            <form onSubmit={handleSubmit}>
+                            <div className="card-header bg-success text-white text-center">
 
-                                <div className="mb-3">
+                                <h3>Add New Expense</h3>
 
-                                    <label>Title</label>
+                            </div>
 
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                        required
-                                    />
+                            <div className="card-body">
 
-                                </div>
+                                <form onSubmit={handleSubmit}>
 
-                                <div className="mb-3">
+                                    <div className="mb-3">
 
-                                    <label>Amount</label>
+                                        <label className="form-label">
+                                            Expense Title
+                                        </label>
 
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        value={amount}
-                                        onChange={(e) => setAmount(e.target.value)}
-                                        required
-                                    />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Enter Expense Title"
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
+                                            required
+                                        />
 
-                                </div>
+                                    </div>
 
-                                <div className="mb-3">
+                                    <div className="mb-3">
 
-                                    <label>Category</label>
+                                        <label className="form-label">
+                                            Amount
+                                        </label>
 
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        value={category}
-                                        onChange={(e) => setCategory(e.target.value)}
-                                        required
-                                    />
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                            placeholder="Enter Amount"
+                                            value={amount}
+                                            onChange={(e) => setAmount(e.target.value)}
+                                            required
+                                        />
 
-                                </div>
+                                    </div>
 
-                                <div className="mb-3">
+                                    <div className="mb-3">
 
-                                    <label>Date</label>
+                                        <label className="form-label">
+                                            Category
+                                        </label>
 
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        value={expense_date}
-                                        onChange={(e) => setExpenseDate(e.target.value)}
-                                        required
-                                    />
+                                        <select
+                                            className="form-select"
+                                            value={category}
+                                            onChange={(e) => setCategory(e.target.value)}
+                                            required
+                                        >
 
-                                </div>
+                                            <option value="">
+                                                Select Category
+                                            </option>
 
-                                <div className="mb-3">
+                                            <option value="Food">
+                                                Food
+                                            </option>
 
-                                    <label>Description</label>
+                                            <option value="Travel">
+                                                Travel
+                                            </option>
 
-                                    <textarea
-                                        className="form-control"
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                    />
+                                            <option value="Shopping">
+                                                Shopping
+                                            </option>
 
-                                </div>
+                                            <option value="Bills">
+                                                Bills
+                                            </option>
 
-                                <button
-                                    className="btn btn-success w-100"
-                                >
-                                    Add Expense
-                                </button>
+                                            <option value="Health">
+                                                Health
+                                            </option>
 
-                            </form>
+                                            <option value="Education">
+                                                Education
+                                            </option>
+
+                                            <option value="Entertainment">
+                                                Entertainment
+                                            </option>
+
+                                            <option value="Other">
+                                                Other
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                    <div className="mb-3">
+
+                                        <label className="form-label">
+                                            Expense Date
+                                        </label>
+
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            value={expense_date}
+                                            onChange={(e) => setExpenseDate(e.target.value)}
+                                            required
+                                        />
+
+                                    </div>
+
+                                    <div className="mb-3">
+
+                                        <label className="form-label">
+                                            Description
+                                        </label>
+
+                                        <textarea
+                                            className="form-control"
+                                            rows="4"
+                                            placeholder="Enter Description"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                        />
+
+                                    </div>
+
+                                    <div className="d-grid">
+
+                                        <button
+                                            className="btn btn-success btn-lg"
+                                        >
+                                            Add Expense
+                                        </button>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
 
                         </div>
 
@@ -152,7 +217,7 @@ function AddExpense() {
 
             </div>
 
-        </div>
+        </>
 
     );
 

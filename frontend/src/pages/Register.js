@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
+import { toast } from "react-toastify";
 
 function Register() {
 
@@ -9,6 +10,7 @@ function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleRegister = async (e) => {
 
@@ -22,7 +24,7 @@ function Register() {
                 password
             });
 
-            alert("Registration Successful");
+            toast.success("Registration Successful");
 
             navigate("/");
 
@@ -30,7 +32,7 @@ function Register() {
 
         catch (err) {
 
-            alert(err.response?.data?.message || "Registration Failed");
+            toast.error(err.response?.data?.message || "Registration Failed");
 
         }
 
@@ -38,21 +40,30 @@ function Register() {
 
     return (
 
-        <div className="container mt-5">
+        <div className="container">
 
-            <div className="row justify-content-center">
+            <div
+                className="row justify-content-center align-items-center"
+                style={{ minHeight: "100vh" }}
+            >
 
                 <div className="col-md-5">
 
-                    <div className="card shadow">
+                    <div className="card shadow-lg">
+
+                        <div className="card-header bg-success text-white text-center">
+
+                            <h2>Expense Controller</h2>
+
+                        </div>
 
                         <div className="card-body">
 
-                            <h2 className="text-center mb-4">
+                            <h4 className="text-center mb-4">
 
                                 Register
 
-                            </h2>
+                            </h4>
 
                             <form onSubmit={handleRegister}>
 
@@ -63,8 +74,9 @@ function Register() {
                                     <input
                                         type="text"
                                         className="form-control"
+                                        placeholder="Enter Full Name"
                                         value={name}
-                                        onChange={(e)=>setName(e.target.value)}
+                                        onChange={(e) => setName(e.target.value)}
                                         required
                                     />
 
@@ -77,8 +89,9 @@ function Register() {
                                     <input
                                         type="email"
                                         className="form-control"
+                                        placeholder="Enter Email"
                                         value={email}
-                                        onChange={(e)=>setEmail(e.target.value)}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required
                                     />
 
@@ -89,12 +102,32 @@ function Register() {
                                     <label>Password</label>
 
                                     <input
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         className="form-control"
+                                        placeholder="Enter Password"
                                         value={password}
-                                        onChange={(e)=>setPassword(e.target.value)}
+                                        onChange={(e) => setPassword(e.target.value)}
                                         required
                                     />
+
+                                </div>
+
+                                <div className="form-check mb-3">
+
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={showPassword}
+                                        onChange={() =>
+                                            setShowPassword(!showPassword)
+                                        }
+                                    />
+
+                                    <label className="form-check-label">
+
+                                        Show Password
+
+                                    </label>
 
                                 </div>
 
@@ -112,8 +145,13 @@ function Register() {
 
                                 Already have an account?
 
-                                <Link to="/">
+                                <Link
+                                    to="/"
+                                    className="ms-2"
+                                >
+
                                     Login
+
                                 </Link>
 
                             </div>

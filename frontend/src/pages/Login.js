@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
+import { toast } from "react-toastify";
 
 function Login() {
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
     const navigate = useNavigate();
 
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
     const handleLogin = async (e) => {
+
         e.preventDefault();
 
         try {
@@ -19,44 +22,54 @@ function Login() {
                 password
             });
 
-            // Save JWT Token
             localStorage.setItem("token", res.data.token);
 
-            alert("Login Successful!");
+            toast.success("Login Successful");
 
-            // Redirect to Dashboard
             navigate("/dashboard");
 
-        } catch (err) {
+        }
 
-            alert(err.response?.data?.message || "Login Failed");
+        catch (err) {
+
+            toast.error(err.response?.data?.message || "Login Failed");
 
         }
+
     };
 
     return (
 
-        <div className="container mt-5">
+        <div className="container">
 
-            <div className="row justify-content-center">
+            <div
+                className="row justify-content-center align-items-center"
+                style={{ minHeight: "100vh" }}
+            >
 
                 <div className="col-md-5">
 
-                    <div className="card shadow">
+                    <div className="card shadow-lg">
+
+                        <div className="card-header bg-primary text-white text-center">
+
+                            <h2>Expense Controller</h2>
+
+                        </div>
 
                         <div className="card-body">
 
-                            <h2 className="text-center mb-4">
+                            <h4 className="text-center mb-4">
+
                                 Login
-                            </h2>
+
+                            </h4>
 
                             <form onSubmit={handleLogin}>
 
                                 <div className="mb-3">
 
-                                    <label className="form-label">
-                                        Email
-                                    </label>
+                                    <label>Email</label>
 
                                     <input
                                         type="email"
@@ -71,12 +84,10 @@ function Login() {
 
                                 <div className="mb-3">
 
-                                    <label className="form-label">
-                                        Password
-                                    </label>
+                                    <label>Password</label>
 
                                     <input
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         className="form-control"
                                         placeholder="Enter Password"
                                         value={password}
@@ -86,14 +97,49 @@ function Login() {
 
                                 </div>
 
+                                <div className="form-check mb-3">
+
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={showPassword}
+                                        onChange={() =>
+                                            setShowPassword(!showPassword)
+                                        }
+                                    />
+
+                                    <label className="form-check-label">
+
+                                        Show Password
+
+                                    </label>
+
+                                </div>
+
                                 <button
-                                    type="submit"
                                     className="btn btn-primary w-100"
                                 >
+
                                     Login
+
                                 </button>
 
                             </form>
+
+                            <div className="text-center mt-3">
+
+                                Don't have an account?
+
+                                <Link
+                                    to="/register"
+                                    className="ms-2"
+                                >
+
+                                    Register
+
+                                </Link>
+
+                            </div>
 
                         </div>
 
@@ -106,6 +152,7 @@ function Login() {
         </div>
 
     );
+
 }
 
 export default Login;

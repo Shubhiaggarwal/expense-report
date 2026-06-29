@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import API from "../services/api";
-
+import Navbar from "../components/Navbar";
+import { toast } from "react-toastify";
 function EditExpense() {
 
     const { id } = useParams();
@@ -49,7 +50,7 @@ function EditExpense() {
 
             catch (err) {
 
-                console.log(err);
+                toast.error(err.response?.data?.message || "Failed to fetch expense");
 
             }
 
@@ -90,7 +91,7 @@ function EditExpense() {
 
             );
 
-            alert("Expense Updated Successfully");
+            toast.success("Expense Updated Successfully");
 
             navigate("/expenses");
 
@@ -98,7 +99,7 @@ function EditExpense() {
 
         catch (err) {
 
-            alert("Update Failed");
+            toast.error(err.response?.data?.message || "Update Failed");
 
         }
 
@@ -106,70 +107,146 @@ function EditExpense() {
 
     return (
 
-        <div className="container mt-5">
+        <>
 
-            <div className="card shadow">
+            <Navbar />
 
-                <div className="card-body">
+            <div className="container mt-5">
 
-                    <h2 className="text-center mb-4">
+                <div className="row justify-content-center">
 
-                        Edit Expense
+                    <div className="col-md-7">
 
-                    </h2>
+                        <div className="card shadow-lg">
 
-                    <form onSubmit={handleSubmit}>
+                            <div className="card-header bg-primary text-white text-center">
 
-                        <input
-                            className="form-control mb-3"
-                            name="title"
-                            value={expense.title}
-                            onChange={handleChange}
-                        />
+                                <h3>Edit Expense</h3>
 
-                        <input
-                            className="form-control mb-3"
-                            type="number"
-                            name="amount"
-                            value={expense.amount}
-                            onChange={handleChange}
-                        />
+                            </div>
 
-                        <input
-                            className="form-control mb-3"
-                            name="category"
-                            value={expense.category}
-                            onChange={handleChange}
-                        />
+                            <div className="card-body">
 
-                        <input
-                            className="form-control mb-3"
-                            type="date"
-                            name="expense_date"
-                            value={expense.expense_date}
-                            onChange={handleChange}
-                        />
+                                <form onSubmit={handleSubmit}>
 
-                        <textarea
-                            className="form-control mb-3"
-                            name="description"
-                            value={expense.description}
-                            onChange={handleChange}
-                        />
+                                    <div className="mb-3">
 
-                        <button className="btn btn-primary w-100">
+                                        <label className="form-label">
+                                            Expense Title
+                                        </label>
 
-                            Update Expense
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="title"
+                                            value={expense.title}
+                                            onChange={handleChange}
+                                            required
+                                        />
 
-                        </button>
+                                    </div>
 
-                    </form>
+                                    <div className="mb-3">
+
+                                        <label className="form-label">
+                                            Amount
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                            name="amount"
+                                            value={expense.amount}
+                                            onChange={handleChange}
+                                            required
+                                        />
+
+                                    </div>
+
+                                    <div className="mb-3">
+
+                                        <label className="form-label">
+                                            Category
+                                        </label>
+
+                                        <select
+                                            className="form-select"
+                                            name="category"
+                                            value={expense.category}
+                                            onChange={handleChange}
+                                            required
+                                        >
+
+                                            <option value="">Select Category</option>
+                                            <option value="Food">Food</option>
+                                            <option value="Travel">Travel</option>
+                                            <option value="Shopping">Shopping</option>
+                                            <option value="Bills">Bills</option>
+                                            <option value="Health">Health</option>
+                                            <option value="Education">Education</option>
+                                            <option value="Entertainment">Entertainment</option>
+                                            <option value="Other">Other</option>
+
+                                        </select>
+
+                                    </div>
+
+                                    <div className="mb-3">
+
+                                        <label className="form-label">
+                                            Expense Date
+                                        </label>
+
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            name="expense_date"
+                                            value={expense.expense_date}
+                                            onChange={handleChange}
+                                            required
+                                        />
+
+                                    </div>
+
+                                    <div className="mb-3">
+
+                                        <label className="form-label">
+                                            Description
+                                        </label>
+
+                                        <textarea
+                                            className="form-control"
+                                            rows="4"
+                                            name="description"
+                                            value={expense.description}
+                                            onChange={handleChange}
+                                        />
+
+                                    </div>
+
+                                    <div className="d-grid">
+
+                                        <button
+                                            className="btn btn-primary btn-lg"
+                                        >
+                                            Update Expense
+                                        </button>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        </>
 
     );
 

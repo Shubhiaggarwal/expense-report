@@ -6,6 +6,7 @@ import ExpenseList from "./pages/ExpenseList";
 import AddExpense from "./pages/AddExpense";
 import EditExpense from "./pages/EditExpense";
 import PrivateRoute from "./components/PrivateRoute";
+import { ToastContainer } from "react-toastify";
 
 function App() {
     return (
@@ -60,6 +61,11 @@ function App() {
                 />
 
             </Routes>
+            <ToastContainer
+    position="top-right"
+    autoClose={3000}
+    theme="colored"
+/>
 
         </BrowserRouter>
     );
